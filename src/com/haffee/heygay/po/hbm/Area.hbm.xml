@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<hibernate-mapping package="com.haffee.heygay.po">
+    <class name="Area">
+        <comment>区域表</comment>
+        <id name="area_id" type="integer">
+            <column name="AREA_ID" length="10">
+            	<comment>主键</comment>
+            </column>
+            <generator class="identity"></generator>
+        </id>
+        <property name="shop_id" type="integer">
+        	<column name="SHOP_ID" length="10">
+        		<comment>所属店铺ID</comment>
+        	</column>
+        </property>
+        <property name="area_name" type="string">
+        	<column name="AREA_NAME" length="50">
+        		<comment>区域名称</comment>
+        	</column>
+        </property>
+        <property name="create_time" type="timestamp">
+        	<column name="CREATE_TIME" length="20">
+        		<comment>创建时间</comment>
+        	</column>
+        </property>  
+        
+    </class>
+</hibernate-mapping>

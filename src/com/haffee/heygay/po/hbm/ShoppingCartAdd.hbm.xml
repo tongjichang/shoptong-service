@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<hibernate-mapping package="com.haffee.heygay.po">
+    <class name="ShoppingCartAdd">
+        <comment>购物车表</comment>
+        <id name="cart_id" type="integer">
+            <column name="CART_ID" length="10">
+            	<comment>主键</comment>
+            </column>
+            <generator class="identity"></generator>
+        </id>
+        <property name="shop_id" type="integer">
+        	<column name="SHOP_ID" length="10">
+        		<comment>店铺ID</comment>
+        	</column>
+        </property>
+        
+        <property name="table_id" type="integer">
+        	<column name="TABLE_ID" length="10">
+        		<comment>桌台ID</comment>
+        	</column>
+        </property>
+        
+        <property name="total_num" type="integer">
+        	<column name="TOTAL_NUM" length="10">
+        		<comment>商品总数</comment>
+        	</column>
+        </property>
+        
+        <property name="total_price" type="float">
+        	<column name="TOTAL_PRICE" length="10" precision="2">
+        		<comment>总价格</comment>
+        	</column>
+        </property>
+        
+        <property name="comments" type="string">
+        	<column name="COMMENTS" length="200">
+        		<comment>备注</comment>
+        	</column>
+        </property>
+        
+        <property name="create_time" type="timestamp">
+        	<column name="CREATE_TIME" length="20">
+        		<comment>创建时间</comment>
+        	</column>
+        </property>
+        <!-- 
+        <set name="goods_set" inverse="false" cascade="all">
+                <key column="cart_id" ></key>
+                <one-to-many class="com.haffee.heygay.po.ShoppingCartGoods"/>
+            </set>
+             -->
+        <property name="status" type="integer">
+        	<column name="STATUS" length="1">
+        		<comment>状态 0：未提交，1：已提交,2:已结账,3:取消</comment>
+        	</column>
+        </property>
+        <property name="waiter_id" type="integer">
+        	<column name="waiter_id" length="10">
+        		<comment>服务员ID</comment>
+        	</column>
+        </property>
+    </class>
+</hibernate-mapping>

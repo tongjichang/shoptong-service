@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<hibernate-mapping package="com.haffee.heygay.po">
+    <class name="Role">
+        <comment>角色表</comment>
+        <id name="role_id" type="integer">
+            <column name="ROLE_ID" length="10">
+            	<comment>主键</comment>
+            </column>
+            <generator class="identity"></generator>
+        </id>
+        <property name="role_name" type="string">
+        	<column name="ROLE_NAME" length="50">
+        		<comment>角色名称</comment>
+        	</column>
+        </property>
+        
+        <property name="create_time" type="timestamp">
+        	<column name="CREATE_TIME" length="20">
+        		<comment>创建时间</comment>
+        	</column>
+        </property>
+        
+    </class>
+</hibernate-mapping>

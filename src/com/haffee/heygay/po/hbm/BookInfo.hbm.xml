@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<hibernate-mapping package="com.haffee.heygay.po">
+    <class name="BookInfo">
+        <comment>预定信息表</comment>
+        <id name="book_id" type="integer">
+            <column name="BOOK_ID" length="10">
+            	<comment>主键</comment>
+            </column>
+            <generator class="identity"></generator>
+        </id>
+        
+        <property name="shop_id" type="integer">
+        	<column name="SHOP_ID" length="10">
+        		<comment>店铺ID</comment>
+        	</column>
+        </property>
+        
+        <property name="table_id" type="integer">
+        	<column name="TABLE_ID" length="10">
+        		<comment>桌台ID</comment>
+        	</column>
+        </property>
+        <property name="table_name" type="string">
+        	<column name="TABLE_NAME" length="100">
+        		<comment>桌台ID</comment>
+        	</column>
+        </property>
+        <property name="name" type="string">
+        	<column name="NAME" length="20">
+        		<comment>姓名</comment>
+        	</column>
+        </property>
+        
+        <property name="phone" type="string">
+        	<column name="PHONE" length="11">
+        		<comment>电话</comment>
+        	</column>
+        </property>
+        
+        <property name="people_num" type="integer">
+        	<column name="PEOPLE_NUM" length="10">
+        		<comment>人数</comment>
+        	</column>
+        </property>
+        
+        <property name="use_time" type="string">
+        	<column name="USE_TIME" length="20">
+        		<comment>创建时间</comment>
+        	</column>
+        </property>  
+        
+        <property name="pre_fee" type="float">
+        	<column name="PRE_FEE" length="10" precision="2">
+        		<comment>押金</comment>
+        	</column>
+        </property>
+        
+        <property name="create_time" type="timestamp">
+        	<column name="CREATE_TIME" length="20">
+        		<comment>创建时间</comment>
+        	</column>
+        </property>
+        
+        <property name="remark" type="string">
+        	<column name="REMAK" length="100">
+        		<comment>备注</comment>
+        	</column>
+        </property>
+        
+         <property name="status" type="integer">
+        	<column name="STATUS" length="1">
+        		<comment>1：正常，2：取消，3：到期</comment>
+        	</column>
+        </property>
+      
+    </class>
+</hibernate-mapping>

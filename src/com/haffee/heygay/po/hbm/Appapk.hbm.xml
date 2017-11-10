@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<hibernate-mapping package="com.haffee.heygay.po">
+    <class name="Appapk">
+        <comment>APP表</comment>
+        <id name="id" type="integer">
+            <column name="ID" length="10">
+            	<comment>主键</comment>
+            </column>
+            <generator class="identity"></generator>
+        </id>
+        <property name="url" type="string">
+        	<column name="URL" length="100">
+        		<comment>下载路径</comment>
+        	</column>
+        </property>
+        
+        <property name="version" type="string">
+        	<column name="VERSION" length="100">
+        		<comment>版本</comment>
+        	</column>
+        </property>
+        
+        <property name="time" type="timestamp">
+        	<column name="TIME" length="20">
+        		<comment>时间</comment>
+        	</column>
+        </property>
+        
+    </class>
+</hibernate-mapping>

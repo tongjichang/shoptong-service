@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<hibernate-mapping package="com.haffee.heygay.po">
+	<class name="ShopExt">
+		<comment>店铺扩展表</comment>
+		<id name="shop_ext_id" type="integer">
+			<column name="SHOP_EXT_ID" length="10">
+				<comment>主键</comment>
+			</column>
+			<generator class="identity"></generator>
+		</id>
+		<property name="shop_id" type="integer">
+			<column name="SHOP_ID" length="10">
+				<comment>店铺ID</comment>
+			</column>
+		</property>
+
+		<property name="shop_ext_code" type="string">
+			<column name="SHOP_EXT_CODE" length="10">
+				<comment>店铺属性代码</comment>
+			</column>
+		</property>
+
+		<property name="content" type="string">
+			<column name="CONTENT" length="100">
+				<comment>属性内容</comment>
+			</column>
+		</property>
+
+	</class>
+</hibernate-mapping>

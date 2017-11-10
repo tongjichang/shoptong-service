@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<hibernate-mapping package="com.haffee.heygay.po">
+    <class name="AA10">
+        <comment>二级代码表</comment>
+        <id name="id" type="integer">
+            <column name="ID" length="10">
+            	<comment>主键</comment>
+            </column>
+            <generator class="identity"></generator>
+        </id>
+        <property name="code" type="string">
+        	<column name="CODE" length="10">
+        		<comment>二级代码</comment>
+        	</column>
+        </property>
+        <property name="code_name" type="string">
+        	<column name="CODE_NAME" length="20">
+        		<comment>二级代码名称</comment>
+        	</column>
+        </property>
+        <property name="code_value" type="string">
+        	<column name="CODE_VALUE" length="20">
+        		<comment>二级代码值</comment>
+        	</column>
+        </property>
+        <property name="order_num" type="integer">
+        	<column name="ORDER_NUM" length="2">
+        		<comment>排序编号</comment>
+        	</column>
+        </property>
+    </class>
+</hibernate-mapping>

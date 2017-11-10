@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<hibernate-mapping package="com.haffee.heygay.po">
+    <class name="ShoppingCartGoodsAdd">
+        <comment>购物车表</comment>
+        <id name="cart_good_id" type="integer">
+            <column name="CART_GOOD_ID" length="10">
+            	<comment>主键</comment>
+            </column>
+            <generator class="identity"></generator>
+        </id>
+        
+        <property name="good_id" type="integer">
+        	<column name="GOOD_ID" length="10">
+        		<comment>商品ID</comment>
+        	</column>
+        </property>
+        
+        <property name="good_name" type="string">
+        	<column name="GOOD_NAME" length="50">
+        		<comment>商品名称</comment>
+        	</column>
+        </property>
+        
+        <property name="good_price" type="float">
+        	<column name="GOOD_PRICE" length="10" precision="2">
+        		<comment>商品价格</comment>
+        	</column>
+        </property>
+        
+        <property name="good_num" type="integer">
+        	<column name="GOOD_NUM" length="10">
+        		<comment>商品数量</comment>
+        	</column>
+        </property>
+        
+        <property name="good_total_price" type="float">
+        	<column name="GOOD_TOTAL_PRICE" length="10" precision="2">
+        		<comment>商品总价</comment>
+        	</column>
+        </property>
+        <!-- 
+        <many-to-one name="cart" class="com.haffee.heygay.po.ShoppingCart" 
+                         column="cart_id" cascade="save-update">
+            </many-to-one>       
+       -->
+       <property name="cart_id" type="integer">
+        	<column name="CART_ID" length="10">
+        		<comment>购物车ID</comment>
+        	</column>
+        </property>
+        <property name="pre_price" type="float">
+        	<column name="PRE_PRICE" length="10" precision="2">
+        		<comment>单价</comment>
+        	</column>
+        </property>
+        <property name="discount" type="float">
+        	<column name="DISCOUNT" length="2" precision="2">
+        		<comment>折扣</comment>
+        	</column>
+        </property>
+        <property name="img_url" type="string">
+        	<column name="IMG_URL" length="100">
+        		<comment>图片路径</comment>
+        	</column>
+        </property>
+    </class>
+</hibernate-mapping>

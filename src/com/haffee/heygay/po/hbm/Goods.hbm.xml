@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<hibernate-mapping package="com.haffee.heygay.po">
+    <class name="Goods">
+        <comment>商品信息表</comment>
+        <id name="good_id" type="integer">
+            <column name="GOOD_ID" length="10">
+            	<comment>主键</comment>
+            </column>
+            <generator class="identity"></generator>
+        </id>
+        <property name="shop_id" type="integer">
+        	<column name="SHOP_ID" length="10">
+        		<comment>店铺ID</comment>
+        	</column>
+        </property>
+        <property name="category_id" type="integer">
+        	<column name="CATEGORY_ID" length="10">
+        		<comment>分类ID</comment>
+        	</column>
+        </property>
+        <property name="goods_name" type="string">
+        	<column name="GOODS_NAME" length="50">
+        		<comment>商品名称</comment>
+        	</column>
+        </property>
+        <property name="sales_count" type="integer">
+        	<column name="SALES_COUNT" length="10">
+        		<comment>销量</comment>
+        	</column>
+        </property>
+        
+        <property name="pre_price" type="float">
+        	<column name="PRE_PRICE" length="10" precision="2">
+        		<comment>单价</comment>
+        	</column>
+        </property>
+        <property name="discount" type="float">
+        	<column name="DISCOUNT" length="2" precision="2">
+        		<comment>折扣</comment>
+        	</column>
+        </property>
+        <property name="img_url" type="string">
+        	<column name="IMG_URL" length="100">
+        		<comment>图片路径</comment>
+        	</column>
+        </property>
+        
+        <property name="create_time" type="timestamp">
+        	<column name="CREATE_TIME" length="20">
+        		<comment>创建时间</comment>
+        	</column>
+        </property>
+        <property name="introduction" type="string">
+        	<column name="INTRODUCTION" length="100">
+        		<comment>简介</comment>
+        	</column>
+        </property>
+        <property name="status" type="integer">
+        	<column name="STATUS" length="1">
+        		<comment>商品状态1:正常，2:下架</comment>
+        	</column>
+        </property>
+        <property name="if_print" type="integer">
+        	<column name="IF_PRINT" length="1">
+        		<comment>是否打印 0:否，1是，默认1</comment>
+        	</column>
+        </property>
+        <property name="print_str" type="string">
+        	<column name="PRINT_STR" length="100">
+        		<comment>打印机编号</comment>
+        	</column>
+        </property>
+        <property name="tuijian" type="string">
+        	<column name="TUIJIAN" length="1">
+        		<comment>是否推荐:0否，1是</comment>
+        	</column>
+        </property>
+        
+        
+    </class>
+</hibernate-mapping>

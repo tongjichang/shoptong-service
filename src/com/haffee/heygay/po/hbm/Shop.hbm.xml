@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<hibernate-mapping package="com.haffee.heygay.po">
+    <class name="Shop">
+        <comment>店铺表</comment>
+        <id name="shop_id" type="integer">
+            <column name="SHOP_ID" length="10">
+            	<comment>主键</comment>
+            </column>
+            <generator class="identity"></generator>
+        </id>
+        <property name="shop_name" type="string">
+        	<column name="SHOP_NAME" length="100">
+        		<comment>店铺名称</comment>
+        	</column>
+        </property>
+        
+        <property name="address" type="string">
+        	<column name="ADDRESS" length="200">
+        		<comment>店铺地址</comment>
+        	</column>
+        </property>
+        
+        <property name="shop_owner_name" type="string">
+        	<column name="SHOP_OWNER_NAME" length="20">
+        		<comment>老板姓名</comment>
+        	</column>
+        </property>
+        
+        <property name="shop_owner_phone" type="string">
+        	<column name="SHOP_OWNER_PHONE" length="11">
+        		<comment>老板电话</comment>
+        	</column>
+        </property>
+        
+        <property name="shop_url" type="string">
+        	<column name="SHOP_URL" length="100">
+        		<comment>店铺地址</comment>
+        	</column>
+        </property>
+        
+        <property name="introduction" type="string">
+        	<column name="INTRODUCTION" length="200">
+        		<comment>店铺简介</comment>
+        	</column>
+        </property>
+        
+        <property name="notice" type="string">
+        	<column name="NOTICE" length="200">
+        		<comment>公告</comment>
+        	</column>
+        </property>
+        
+        <property name="create_time" type="timestamp">
+        	<column name="CREATE_TIME" length="20">
+        		<comment>创建时间</comment>
+        	</column>
+        </property>
+        
+        <property name="icon" type="string">
+        	<column name="ICON" length="100">
+        		<comment>店铺图标</comment>
+        	</column>
+        </property>
+        
+        <property name="begin_time" type="string">
+        	<column name="BEGIN_TIME" length="20">
+        		<comment>营业开始时间</comment>
+        	</column>
+        </property>
+        
+        <property name="end_time" type="string">
+        	<column name="END_TIME" length="20">
+        		<comment>营业结束时间</comment>
+        	</column>
+        </property>
+        
+         <property name="shop_status" type="integer">
+        	<column name="SHOP_STATUS" length="1">
+        		<comment>店铺状态1:正常，2:冻结</comment>
+        	</column>
+        </property>
+        
+        <property name="wechat_img" type="string">
+        	<column name="WECHAT_IMG" length="100">
+        		<comment>微信付款码</comment>
+        	</column>
+        </property>
+        
+        <property name="alipay_img" type="string">
+        	<column name="ALIPAY_IMG" length="100">
+        		<comment>支付宝付款码</comment>
+        	</column>
+        </property>
+        
+        <property name="print_way" type="integer">
+        	<column name="print_way" length="1">
+        		<comment>后厨打印方式 1：一菜一打，2：一单一打 ，默认1</comment>
+        	</column>
+        </property>
+        
+    </class>
+</hibernate-mapping>

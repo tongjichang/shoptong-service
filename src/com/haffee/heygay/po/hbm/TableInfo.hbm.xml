@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<hibernate-mapping package="com.haffee.heygay.po">
+    <class name="TableInfo">
+        <comment>桌台</comment>
+        <id name="table_id" type="integer">
+            <column name="TABLE_ID" length="10">
+            	<comment>主键</comment>
+            </column>
+            <generator class="identity"></generator>
+        </id>
+        <property name="table_name" type="string">
+        	<column name="TABLE_NAME" length="50">
+        		<comment>桌台名称</comment>
+        	</column>
+        </property>
+        
+        <property name="area_id" type="integer">
+        	<column name="AREA_ID" length="10">
+        		<comment>区域ID</comment>
+        	</column>
+        </property>
+        
+        <property name="shop_id" type="integer">
+        	<column name="SHOP_ID" length="10">
+        		<comment>店铺ID</comment>
+        	</column>
+        </property>
+        
+        <property name="table_status" type="integer">
+        	<column name="TABLE_STATUS" length="1">
+        		<comment>桌台状态0:未使用，1:正常使用，2:顾客预定，3:服务员占用，4:其他</comment>
+        	</column>
+        </property>
+        
+        <property name="table_book_id" type="integer">
+        	<column name="TABLE_BOOK_ID" length="10">
+        		<comment>预定信息</comment>
+        	</column>
+        </property>
+        
+        
+        <property name="people_count" type="integer">
+        	<column name="PEOPLE_COUNT" length="10">
+        		<comment>容纳人数</comment>
+        	</column>
+        </property>
+        
+        <property name="create_time" type="timestamp">
+        	<column name="CREATE_TIME" length="20">
+        		<comment>创建时间</comment>
+        	</column>
+        </property>
+      
+    </class>
+</hibernate-mapping>

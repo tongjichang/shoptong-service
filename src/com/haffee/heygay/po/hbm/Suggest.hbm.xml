@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<hibernate-mapping package="com.haffee.heygay.po">
+    <class name="Suggest">
+        <comment>服务表</comment>
+        <id name="s_id" type="integer">
+            <column name="S_ID" length="10">
+            	<comment>主键</comment>
+            </column>
+            <generator class="identity"></generator>
+        </id>
+        
+        <property name="content" type="string">
+        	<column name="CONTENT" length="50">
+        		<comment>店铺名称</comment>
+        	</column>
+        </property>
+        
+        <property name="shop_id" type="integer">
+        	<column name="SHOP_ID" length="10">
+        		<comment>店铺ID</comment>
+        	</column>
+        </property>
+        
+        <property name="shop_name" type="string">
+        	<column name="SHOP_NAME" length="50">
+        		<comment>店铺名称</comment>
+        	</column>
+        </property>
+        
+        <property name="waiter_id" type="integer">
+        	<column name="WAITER_ID" length="10">
+        		<comment>服务员ID</comment>
+        	</column>
+        </property>
+        
+        <property name="waiter_name" type="string">
+        	<column name="WAITER_NAME" length="50">
+        		<comment>服务员姓名</comment>
+        	</column>
+        </property>
+        
+       
+        
+        <property name="create_time" type="timestamp">
+        	<column name="CREATE_TIME" length="20">
+        		<comment>创建时间</comment>
+        	</column>
+        </property>
+        
+    </class>
+</hibernate-mapping>
