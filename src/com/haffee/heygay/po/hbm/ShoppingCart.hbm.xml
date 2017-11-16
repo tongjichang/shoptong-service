@@ -3,11 +3,11 @@
 <hibernate-mapping package="com.haffee.heygay.po">
     <class name="ShoppingCart">
         <comment>购物车表</comment>
-        <id name="cart_id" type="integer">
-            <column name="CART_ID" length="10">
+        <id name="cart_id" type="string">
+            <column name="CART_ID" length="32">
             	<comment>主键</comment>
             </column>
-            <generator class="identity"></generator>
+            <generator class="assigned"></generator>
         </id>
         <property name="shop_id" type="integer">
         	<column name="SHOP_ID" length="10">

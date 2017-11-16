@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 public class OrderInfo {
 
 	private String order_id;//订单ID
-	private int user_id; //用户ID
+	private String user_id; //用户ID
 	private String user_phone; //用户电话
 	private String order_num; //订单编号
 	private int shop_id;//店铺ID
@@ -24,7 +24,7 @@ public class OrderInfo {
 	private float discount;// 折扣
 	private float real_payment;// 实际收用户金额
 	private float minus_money;// 抹零金额
-	private int shopping_cart_id;//购物车ID
+	private String shopping_cart_id;//购物车ID
 	private int waiter_id;//服务员ID
 	private Timestamp create_time;//创建时间
 	private String comments;// 备注
@@ -37,6 +37,7 @@ public class OrderInfo {
 	private TableInfo table;//桌台
 	private int way;  //1:堂食，2：打包
 	private int go_goods_way;//上菜方式 1.做好即上，2：等待叫起
+	private String address;//送货地址
 
 	public String getOrder_id() {
 		return order_id;
@@ -46,11 +47,11 @@ public class OrderInfo {
 		this.order_id = order_id;
 	}
 
-	public int getUser_id() {
+	public String getUser_id() {
 		return user_id;
 	}
 
-	public void setUser_id(int user_id) {
+	public void setUser_id(String user_id) {
 		this.user_id = user_id;
 	}
 
@@ -134,11 +135,11 @@ public class OrderInfo {
 		this.minus_money = minus_money;
 	}
 
-	public int getShopping_cart_id() {
+	public String getShopping_cart_id() {
 		return shopping_cart_id;
 	}
 
-	public void setShopping_cart_id(int shopping_cart_id) {
+	public void setShopping_cart_id(String shopping_cart_id) {
 		this.shopping_cart_id = shopping_cart_id;
 	}
 
@@ -244,6 +245,14 @@ public class OrderInfo {
 
 	public void setGo_goods_way(int go_goods_way) {
 		this.go_goods_way = go_goods_way;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 }

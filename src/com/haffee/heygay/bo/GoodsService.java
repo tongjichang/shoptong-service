@@ -215,9 +215,8 @@ public class GoodsService {
 	 * @param table_id
 	 * @return
 	 */
-	@RequestMapping(value = "/goods/selectCtgForShopPerson/{shop_id}/{table_id}", method = RequestMethod.GET)
-	public @ResponseBody Object selectCategoryForShopPerson(@PathVariable("shop_id") String shop_id,
-			@PathVariable("table_id") String table_id) {
+	@RequestMapping(value = "/goods/selectCtgForShopPerson/{shop_id}/{cart_id}", method = RequestMethod.GET)
+	public @ResponseBody Object selectCategoryForShopPerson(@PathVariable("shop_id") String shop_id,@PathVariable("cart_id") String cart_id) {
 		String message = "成功";
 		String code = "1000";
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -233,25 +232,12 @@ public class GoodsService {
 							.getAllObject("from Goods g where g.category_id = " + c.getCategory_id() + " and g.status = 1");
 					for (Object object : goods_list) {
 						Goods g = (Goods) object;
-						ShoppingCart sc = (ShoppingCart) dao.getOneObject("from ShoppingCart s where s.table_id="
-								+ table_id + " and s.status = 0 and s.shop_id=" + shop_id);
+						ShoppingCart sc = (ShoppingCart) dao.getOneObject("from ShoppingCart s where  s.cart_id='" + cart_id+"' and s.status=0");
 						if (null != sc) {
 							ShoppingCartGoods scg = (ShoppingCartGoods) dao
-									.getOneObject("from ShoppingCartGoods scg where scg.cart_id=" + sc.getCart_id()
-											+ " and scg.good_id=" + g.getGood_id());
+									.getOneObject("from ShoppingCartGoods scg where scg.cart_id='" + sc.getCart_id()+"'");
 							if(null!=scg)
 								g.setIn_cart_num(scg.getGood_num());
-						}else{//是否有加菜的菜品
-							ShoppingCartAdd sc_add = (ShoppingCartAdd) dao.getOneObject("from ShoppingCartAdd s where s.table_id="
-									+ table_id + " and s.status = 0 and s.shop_id=" + shop_id);
-							if(null != sc_add){
-								ShoppingCartGoodsAdd scg_add = (ShoppingCartGoodsAdd) dao
-										.getOneObject("from ShoppingCartGoodsAdd scg where scg.cart_id=" + sc_add.getCart_id()
-												+ " and scg.good_id=" + g.getGood_id());
-								if(null!=scg_add)
-									g.setIn_cart_num(scg_add.getGood_num());
-							}
-							
 						}
 					}
 					c.setGoods_list(goods_list);
@@ -260,12 +246,12 @@ public class GoodsService {
 			}
 			Shop s = (Shop) dao.getOneObject("from Shop s where shop_id=" + shop_id);
 			map.put("SHOP", s);
-			TableInfo table = (TableInfo)dao.getOneObject("from TableInfo t where t.table_id="+table_id);
-			map.put("TABLE", table);
-			if(null!=table){
-				Area area = (Area)dao.getOneObject("from Area a where a.area_id="+table.getArea_id());
-				map.put("AREA", area);
-			}
+			//TableInfo table = (TableInfo)dao.getOneObject("from TableInfo t where t.table_id="+table_id);
+			//map.put("TABLE", table);
+			//if(null!=table){
+			//	Area area = (Area)dao.getOneObject("from Area a where a.area_id="+table.getArea_id());
+			//	map.put("AREA", area);
+			//}
 		} catch (Exception e) {
 			code = "1002";
 			message = "系统异常";

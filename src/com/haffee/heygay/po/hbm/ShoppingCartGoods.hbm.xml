@@ -44,8 +44,8 @@
                          column="cart_id" cascade="save-update">
             </many-to-one>       
        -->
-       <property name="cart_id" type="integer">
-        	<column name="CART_ID" length="10">
+       <property name="cart_id" type="string">
+        	<column name="CART_ID" length="32">
         		<comment>购物车ID</comment>
         	</column>
         </property>

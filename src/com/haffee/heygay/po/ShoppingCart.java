@@ -14,7 +14,7 @@ import java.util.List;
 
 public class ShoppingCart {
 
-	private int cart_id;//购物车ID
+	private String cart_id;//购物车ID
 	private int shop_id;//店铺ID
 	private int table_id;//桌台ID
 	private int total_num;//商品总数
@@ -25,11 +25,11 @@ public class ShoppingCart {
 	private int status;//状态 0：未提交，1：已提交,2:已结账,3:取消
 	private int waiter_id;//服务员ID
 
-	public int getCart_id() {
+	public String getCart_id() {
 		return cart_id;
 	}
 
-	public void setCart_id(int cart_id) {
+	public void setCart_id(String cart_id) {
 		this.cart_id = cart_id;
 	}
 

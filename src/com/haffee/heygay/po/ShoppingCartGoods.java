@@ -9,7 +9,7 @@ public class ShoppingCartGoods {
 	private int good_num;//菜品数量
 	private float good_total_price;//菜品总价
 	private int from; //1:顾客，2：服务员
-	private int cart_id;//购物车ID
+	private String cart_id;//购物车ID
 	private float pre_price;//单价
 	private float discount;//折扣
 	private String img_url;//菜品图片URL
@@ -81,11 +81,11 @@ public class ShoppingCartGoods {
 		this.from = from;
 	}
 
-	public int getCart_id() {
+	public String getCart_id() {
 		return cart_id;
 	}
 
-	public void setCart_id(int cart_id) {
+	public void setCart_id(String cart_id) {
 		this.cart_id = cart_id;
 	}
 

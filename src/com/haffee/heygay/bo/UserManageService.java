@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.haffee.heygay.dao.IUserDao;
 import com.haffee.heygay.po.User;
 import com.haffee.heygay.po.Waiter;
@@ -123,6 +122,60 @@ public class UserManageService {
 				user.setLogin_key(null);
 				dao.doUpdateObject(user);
 			}
+		}
+		map.put("CODE", code);
+		map.put("MESSAGE", message);
+		return map;
+	}
+	
+	/**
+	 * 校验用户是否存在
+	 * @param username
+	 * @return
+	 */
+	@RequestMapping(value="/userservice/checkUser",method=RequestMethod.POST)
+	public @ResponseBody Object checkUserExists(String username){
+		String message = "成功";
+		String code = "1000";		
+		Map<String,Object> map = new HashMap<String,Object>();
+		try {
+			User user = (User)dao.getOneObject("from User u where u.user_name='"+username+"' and u.role_id=9");
+			if(null!=user){
+				map.put("DATA", "1");
+			}else{
+				map.put("DATA", "0");
+			}
+		} catch (Exception e) {
+			map.put("DATA", "0");
+			e.printStackTrace();
+		}
+		map.put("CODE", code);
+		map.put("MESSAGE", message);
+		return map;
+	}
+	
+	/**
+	 * 注册用户
+	 * @param phone_no
+	 * @return
+	 */
+	@RequestMapping(value="/userservice/registePhone",method=RequestMethod.POST)
+	public @ResponseBody Object registePhone(String phone_no){
+		String message = "成功";
+		String code = "1000";		
+		Map<String,Object> map = new HashMap<String,Object>();
+		try {
+			User user = (User)dao.getOneObject("from User u where u.user_name='"+phone_no+"' and u.role_id=9");
+			if(null==user){
+				User u = new User();
+				u.setRole_id(9);
+				u.setUser_name(phone_no);
+				u.setPassword(phone_no);
+				dao.doSaveObject(u);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		map.put("CODE", code);
 		map.put("MESSAGE", message);

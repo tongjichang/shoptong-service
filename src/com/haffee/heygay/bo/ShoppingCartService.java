@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.commons.lang.xwork.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +49,7 @@ public class ShoppingCartService {
 	 */
 	@RequestMapping(value = "/cart/addCart", method = RequestMethod.POST)
 	@ResponseBody
-	public Object doAddShoppingCart(String good_id, String table_id, String shop_id, String from) {
+	public Object doAddShoppingCart(String good_id, String cart_id) {
 		String message = "成功";
 		String code = "1000";
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -56,44 +57,37 @@ public class ShoppingCartService {
 		// 2.查询菜品信息
 		// 3.增加菜品进购物车
 		try {
-			if (StringUtils.isEmpty(table_id) || StringUtils.isEmpty(good_id) || StringUtils.isEmpty(shop_id)) {
+			if (StringUtils.isEmpty(good_id)) {
 				code = "1002";
 				message = "参数异常";
 			} else {
-				ShoppingCart cart = (ShoppingCart) dao.getOneObject("from ShoppingCart s where s.table_id=" + table_id
-						+ " and s.status in (0,1) and s.shop_id=" + shop_id);
 				Goods good = (Goods) dao.getOneObject("from Goods g where g.good_id=" + good_id);
 				if (null == good) {
 					code = "1001";
 					message = "未查到商品信息";
 				} else {
-					if (null == cart) {
+					if (StringUtils.isEmpty(cart_id)) {
 						// 新建
+						String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 						ShoppingCart sc = new ShoppingCart();
-						sc.setShop_id(Integer.valueOf(shop_id));
-						sc.setTable_id(Integer.valueOf(table_id));
+						sc.setCart_id(uuid);
 						sc.setTotal_num(1);
 						sc.setTotal_price(good.getPre_price() * good.getDiscount());
 						Date date = new Date();
 						sc.setCreate_time(new Timestamp(date.getTime()));
 						sc.setStatus(0); // 默认未提交
 						dao.doSaveObject(sc);
-						ShoppingCart s = (ShoppingCart) dao.getOneObject("from ShoppingCart s where s.table_id="
-								+ table_id + " and s.status in (0,1) and s.shop_id=" + shop_id);
 						// 添加菜品
-						// List<Object> list = new ArrayList<Object>();
 						// 组装购物车商品
 						ShoppingCartGoods sc_good = new ShoppingCartGoods();
-						// sc_good.setCart(sc);
-						sc_good.setFrom(Integer.valueOf(from));
 						sc_good.setGood_id(good.getGood_id());
 						sc_good.setGood_name(good.getGoods_name());
 						sc_good.setGood_num(1);
 						sc_good.setGood_price(good.getPre_price() * good.getDiscount());
 						sc_good.setGood_total_price(good.getPre_price() * good.getDiscount());
-						sc_good.setCart_id(s.getCart_id());
-						sc_good.setPre_price(good.getPre_price());
-						sc_good.setDiscount(good.getDiscount());
+						sc_good.setCart_id(uuid);
+						//sc_good.setPre_price(good.getPre_price());
+						//sc_good.setDiscount(good.getDiscount());
 						sc_good.setImg_url(good.getImg_url());
 						dao.doSaveObject(sc_good);
 						// 将购物车商品添加到商品集合
@@ -101,208 +95,43 @@ public class ShoppingCartService {
 						// 将商品集合添加到购物车中
 						// sc.setGoods_set(list);
 						// 新建购物车
+						map.put("CART_ID", uuid); //将购物车ID返回给客户端
 
 					} else {
-						if (cart.getStatus() == 0) {
-							// 更新
-							// 1.查询购物车
-							// 2.便利购物车中商品，如果有，更新数量，价格，如果没有新增
-							// 3.更新购物车相关信息
+						ShoppingCart cart = (ShoppingCart)dao.getOneObject("from ShoppingCart sc where sc.cart_id='"+cart_id+"' and sc.status=0");
+						if(null!=cart){
 							List<Object> goods_set = dao
-									.getAllObject("from ShoppingCartGoods scg where scg.cart_id=" + cart.getCart_id());
+									.getAllObject("from ShoppingCartGoods scg where scg.cart_id='" + cart.getCart_id()+"'");
 							boolean is_has = false;
-							if (null != goods_set) {
-								for (Object object : goods_set) {
-									ShoppingCartGoods sc_good = (ShoppingCartGoods) object;
-									if (sc_good.getGood_id() == good.getGood_id()) {
-										// 已经存在商品
-										sc_good.setFrom(Integer.valueOf(from));
-										sc_good.setGood_num(sc_good.getGood_num() + 1); // 商品数量加1
-										// 总价格
-										sc_good.setGood_total_price(
-												sc_good.getGood_total_price() + sc_good.getGood_price());
-										is_has = true;
-										dao.doUpdateObject(object);
-										break;
-									}
+							for (Object object : goods_set) {
+								ShoppingCartGoods sc_good = (ShoppingCartGoods) object;
+								if (sc_good.getGood_id() == good.getGood_id()) {
+									// 已经存在商品
+									sc_good.setGood_num(sc_good.getGood_num() + 1); // 商品数量加1
+									// 总价格
+									sc_good.setGood_total_price(
+											sc_good.getGood_total_price() + sc_good.getGood_price());
+									is_has = true;
+									dao.doUpdateObject(object);
+									break;
 								}
-								if (!is_has) { // 购物车中没有此商品
-									// 组装购物车商品
-									ShoppingCartGoods sc_good = new ShoppingCartGoods();
-									sc_good.setFrom(Integer.valueOf(from));
-									sc_good.setGood_id(good.getGood_id());
-									sc_good.setGood_name(good.getGoods_name());
-									sc_good.setGood_num(1);
-									sc_good.setGood_price(good.getPre_price() * good.getDiscount());
-									sc_good.setGood_total_price(good.getPre_price() * good.getDiscount());
-									sc_good.setCart_id(cart.getCart_id());
-									sc_good.setPre_price(good.getPre_price());
-									sc_good.setDiscount(good.getDiscount());
-									sc_good.setImg_url(good.getImg_url());
-									dao.doSaveObject(sc_good);
-								}
-								cart.setTotal_num(cart.getTotal_num() + 1);
-								cart.setTotal_price(cart.getTotal_price() + (good.getPre_price() * good.getDiscount()));
-								dao.doUpdateObject(cart);
-							} else {
-								code = "1002";
-								message = "系统异常";
 							}
-						} else if (cart.getStatus() == 1) { // 购物车已提交
-							// 1.查询订单状态
-							// 2.服务员未确认，直接添加购物车
-							// 3.服务员已确认，生成临时购物车
-							OrderInfo order = (OrderInfo) dao
-									.getOneObject("from OrderInfo o where o.shopping_cart_id=" + cart.getCart_id());
-							if (null != order) {
-//								if (order.getStatus() == -1) {// 服务员未确认，直接在现有购物车添加商品
-//									// 1.更新购物车
-//									List<Object> goods_set = dao.getAllObject(
-//											"from ShoppingCartGoods scg where scg.cart_id=" + cart.getCart_id());
-//									boolean is_has = false;
-//									if (null != goods_set) {
-//										for (Object object : goods_set) {
-//											ShoppingCartGoods sc_good = (ShoppingCartGoods) object;
-//											if (sc_good.getGood_id() == good.getGood_id()) {
-//												// 已经存在商品
-//												sc_good.setFrom(Integer.valueOf(from));
-//												sc_good.setGood_num(sc_good.getGood_num() + 1); // 商品数量加1
-//												// 总价格
-//												sc_good.setGood_total_price(
-//														sc_good.getGood_total_price() + sc_good.getGood_price());
-//												is_has = true;
-//												dao.doUpdateObject(object);
-//												break;
-//											}
-//										}
-//										if (!is_has) { // 购物车中没有此商品
-//											// 组装购物车商品
-//											ShoppingCartGoods sc_good = new ShoppingCartGoods();
-//											sc_good.setFrom(Integer.valueOf(from));
-//											sc_good.setGood_id(good.getGood_id());
-//											sc_good.setGood_name(good.getGoods_name());
-//											sc_good.setGood_num(1);
-//											sc_good.setGood_price(good.getPre_price() * good.getDiscount());
-//											sc_good.setGood_total_price(good.getPre_price() * good.getDiscount());
-//											sc_good.setCart_id(cart.getCart_id());
-//											sc_good.setPre_price(good.getPre_price());
-//											sc_good.setDiscount(good.getDiscount());
-//											sc_good.setImg_url(good.getImg_url());
-//											dao.doSaveObject(sc_good);
-//										}
-//										cart.setTotal_num(cart.getTotal_num() + 1);
-//										cart.setTotal_price(
-//												cart.getTotal_price() + (good.getPre_price() * good.getDiscount()));
-//										dao.doUpdateObject(cart);
-//									} else {
-//										code = "1002";
-//										message = "系统异常";
-//									}
-//									// 2.更新订单
-//									order.setGoods_num(order.getGoods_num() + 1);
-//									order.setPayment(order.getPayment() + (good.getPre_price() * good.getDiscount()));
-//									order.setReal_payment(
-//											order.getReal_payment() + (good.getPre_price() * good.getDiscount()));
-//									dao.doUpdateObject(order);
-//									code = "10000";
-								//} else if (order.getStatus() == 0) {// 服务员已确认，生成临时购物车，重新下单，推送
-									ShoppingCartAdd sc_add = (ShoppingCartAdd) dao
-											.getOneObject("from ShoppingCartAdd s where s.table_id=" + table_id
-													+ " and s.status in (0,1) and s.shop_id=" + shop_id+" order by s.status asc");
-									if (null == sc_add || sc_add.getStatus()==1) { //加菜购物车不存在，或者购物车已提交
-										ShoppingCartAdd sc_add_new = new ShoppingCartAdd();
-										sc_add_new.setShop_id(Integer.valueOf(shop_id));
-										sc_add_new.setTable_id(Integer.valueOf(table_id));
-										sc_add_new.setTotal_num(1);
-										sc_add_new.setTotal_price(good.getPre_price() * good.getDiscount());
-										Date date = new Date();
-										sc_add_new.setCreate_time(new Timestamp(date.getTime()));
-										sc_add_new.setStatus(0); // 默认未提交
-										dao.doSaveObject(sc_add_new);
-										ShoppingCartAdd s_add = (ShoppingCartAdd) dao
-												.getOneObject("from ShoppingCartAdd s where s.table_id=" + table_id
-														+ " and s.status = 0 and s.shop_id=" + shop_id);
-										// 添加菜品
-										// 组装购物车商品
-										ShoppingCartGoodsAdd sc_good_add = new ShoppingCartGoodsAdd();
-										// sc_good.setCart(sc);
-										sc_good_add.setFrom(Integer.valueOf(from));
-										sc_good_add.setGood_id(good.getGood_id());
-										sc_good_add.setGood_name(good.getGoods_name());
-										sc_good_add.setGood_num(1);
-										sc_good_add.setGood_price(good.getPre_price() * good.getDiscount());
-										sc_good_add.setGood_total_price(good.getPre_price() * good.getDiscount());
-										sc_good_add.setCart_id(s_add.getCart_id());
-										sc_good_add.setPre_price(good.getPre_price());
-										sc_good_add.setDiscount(good.getDiscount());
-										sc_good_add.setImg_url(good.getImg_url());
-										dao.doSaveObject(sc_good_add);
-									} else {
-										// 加菜购物车已存在
-										List<Object> goods_set_add = dao
-												.getAllObject("from ShoppingCartGoodsAdd scg where scg.cart_id="
-														+ sc_add.getCart_id());
-										boolean is_has = false;
-										if (null != goods_set_add) {
-											for (Object object : goods_set_add) {
-												ShoppingCartGoodsAdd sc_good_add = (ShoppingCartGoodsAdd) object;
-												if (sc_good_add.getGood_id() == good.getGood_id()) {
-													// 已经存在商品
-													sc_good_add.setFrom(Integer.valueOf(from));
-													sc_good_add.setGood_num(sc_good_add.getGood_num() + 1); // 商品数量加1
-													// 总价格
-													sc_good_add.setGood_total_price(sc_good_add.getGood_total_price()
-															+ sc_good_add.getGood_price());
-													is_has = true;
-													dao.doUpdateObject(object);
-													break;
-												}
-											}
-											if (!is_has) { // 购物车中没有此商品
-												// 组装购物车商品
-												ShoppingCartGoodsAdd sc_good_add = new ShoppingCartGoodsAdd();
-												sc_good_add.setFrom(Integer.valueOf(from));
-												sc_good_add.setGood_id(good.getGood_id());
-												sc_good_add.setGood_name(good.getGoods_name());
-												sc_good_add.setGood_num(1);
-												sc_good_add.setGood_price(good.getPre_price() * good.getDiscount());
-												sc_good_add
-														.setGood_total_price(good.getPre_price() * good.getDiscount());
-												sc_good_add.setCart_id(sc_add.getCart_id());
-												sc_good_add.setPre_price(good.getPre_price());
-												sc_good_add.setDiscount(good.getDiscount());
-												sc_good_add.setImg_url(good.getImg_url());
-												dao.doSaveObject(sc_good_add);
-											}
-											sc_add.setTotal_num(sc_add.getTotal_num() + 1);
-											sc_add.setTotal_price(sc_add.getTotal_price()
-													+ (good.getPre_price() * good.getDiscount()));
-											dao.doUpdateObject(sc_add);
-											OrderInfoAdd order_add = (OrderInfoAdd) dao
-													.getOneObject("from OrderInfoAdd o where o.shopping_cart_id="
-															+ sc_add.getCart_id());
-											if (null != order_add) {
-												order_add.setGoods_num(order_add.getGoods_num() + 1);
-												order_add.setPayment(order_add.getPayment()
-														+ (good.getPre_price() * good.getDiscount()));
-												dao.doUpdateObject(order_add);
-											}
-
-										} else {
-											code = "1002";
-											message = "系统异常";
-										}
-										if (sc_add.getStatus() == 1) {
-											code = "10000";
-										}
-									}
-								//}
-							} else {
-								code = "1001";
-								message = "购物车已提交，未查询到订单";
+							if (!is_has) { // 购物车中没有此商品
+								// 组装购物车商品
+								ShoppingCartGoods sc_good = new ShoppingCartGoods();
+								sc_good.setGood_id(good.getGood_id());
+								sc_good.setGood_name(good.getGoods_name());
+								sc_good.setGood_num(1);
+								sc_good.setGood_price(good.getPre_price() * good.getDiscount());
+								sc_good.setGood_total_price(good.getPre_price() * good.getDiscount());
+								sc_good.setCart_id(cart.getCart_id());
+								sc_good.setImg_url(good.getImg_url());
+								dao.doSaveObject(sc_good);
 							}
+							cart.setTotal_num(cart.getTotal_num() + 1);
+							cart.setTotal_price(cart.getTotal_price() + good.getPre_price());
+							dao.doUpdateObject(cart);
 						}
-
 					}
 				}
 			}
@@ -330,28 +159,15 @@ public class ShoppingCartService {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 			ShoppingCart sc = (ShoppingCart) dao
-					.getOneObject("from ShoppingCart s where s.cart_id=" + cart.getCart_id() + "and s.status=0");
+					.getOneObject("from ShoppingCart s where s.cart_id='" + cart.getCart_id() + "' and s.status=0");
 			if (null != sc) {
-				List<Object> list = dao.getAllObject("from ShoppingCartGoods scg where scg.cart_id=" + sc.getCart_id());
+				List<Object> list = dao.getAllObject("from ShoppingCartGoods scg where scg.cart_id='" + sc.getCart_id()+"'");
 				for (Object object : list) {
 					if (null != object) {
 						dao.doDeleteObject(object);
 					}
 				}
 				dao.doDeleteObject(sc);
-			} else {
-				ShoppingCartAdd sc_add = (ShoppingCartAdd) dao
-						.getOneObject("from ShoppingCartAdd s where s.cart_id=" + cart.getCart_id() + "and s.status=0");
-				if (null != sc_add) {
-					List<Object> list = dao
-							.getAllObject("from ShoppingCartGoodsAdd scg where scg.cart_id=" + sc_add.getCart_id());
-					for (Object object : list) {
-						if (null != object) {
-							dao.doDeleteObject(object);
-						}
-					}
-					dao.doDeleteObject(sc_add);
-				}
 			}
 		} catch (Exception e) {
 			code = "1002";
@@ -371,27 +187,18 @@ public class ShoppingCartService {
 	 */
 	@RequestMapping(value = "/cart/getCart", method = RequestMethod.POST)
 	@ResponseBody
-	public Object selectShoppingCart(String table_id, String shop_id) {
+	public Object selectShoppingCart(String cart_id) {
 		String message = "成功";
 		String code = "1000";
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 			ShoppingCart sc = (ShoppingCart) dao.getOneObject(
-					"from ShoppingCart s where s.table_id=" + table_id + " and s.status = 0 and s.shop_id=" + shop_id);
+					"from ShoppingCart s where s.cart_id='" + cart_id+"' and s.status=0");
 			if (sc != null) {
-				List<Object> list = dao.getAllObject("from ShoppingCartGoods scg where scg.cart_id=" + sc.getCart_id());
+				List<Object> list = dao.getAllObject("from ShoppingCartGoods scg where scg.cart_id='" + sc.getCart_id()+"'");
 				sc.setGoods_set(list);
 				map.put("DATA", sc);
-			} else {
-				ShoppingCartAdd sc_add = (ShoppingCartAdd) dao.getOneObject("from ShoppingCartAdd s where s.table_id="
-						+ table_id + " and s.status = 0 and s.shop_id=" + shop_id);
-				if (sc_add != null) {
-					List<Object> list = dao
-							.getAllObject("from ShoppingCartGoodsAdd scg where scg.cart_id=" + sc_add.getCart_id());
-					sc_add.setGoods_set(list);
-					map.put("DATA", sc_add);
-				}
-			}
+			} 
 		} catch (Exception e) {
 			code = "1002";
 			message = "系统异常";
@@ -417,10 +224,10 @@ public class ShoppingCartService {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 			ShoppingCart cart = (ShoppingCart) dao
-					.getOneObject("from ShoppingCart s where s.cart_id=" + cart_id + " and s.status=0");
+					.getOneObject("from ShoppingCart s where s.cart_id='" + cart_id + "' and s.status=0");
 			if (null != cart) {
 				List<Object> goods_set = dao
-						.getAllObject("from ShoppingCartGoods scg where scg.cart_id=" + cart.getCart_id());
+						.getAllObject("from ShoppingCartGoods scg where scg.cart_id='" + cart.getCart_id()+"'");
 				for (Object object : goods_set) {
 					ShoppingCartGoods sc_good = (ShoppingCartGoods) object;
 					if (sc_good.getGood_id() == Integer.valueOf(good_id)) {
@@ -441,33 +248,7 @@ public class ShoppingCartService {
 						break;
 					}
 				}
-			} else {
-				ShoppingCartAdd cart_add = (ShoppingCartAdd) dao
-						.getOneObject("from ShoppingCartAdd s where s.cart_id=" + cart_id + " and s.status=0");
-				List<Object> goods_set_add = dao
-						.getAllObject("from ShoppingCartGoodsAdd scg where scg.cart_id=" + cart_add.getCart_id());
-				for (Object object : goods_set_add) {
-					ShoppingCartGoodsAdd sc_good_add = (ShoppingCartGoodsAdd) object;
-					if (sc_good_add.getGood_id() == Integer.valueOf(good_id)) {
-						if (sc_good_add.getGood_num() > 1) {
-							sc_good_add.setGood_num(sc_good_add.getGood_num() - 1);
-							sc_good_add.setGood_total_price(
-									sc_good_add.getGood_total_price() - sc_good_add.getGood_price());
-							dao.doUpdateObject(object);
-						} else {
-							dao.doDeleteObject(object);
-						}
-						cart_add.setTotal_num(cart_add.getTotal_num() - 1);
-						cart_add.setTotal_price(cart_add.getTotal_price() - sc_good_add.getGood_price());
-						if (cart_add.getTotal_num() > 0) {
-							dao.doUpdateObject(cart_add);
-						} else {
-							dao.doDeleteObject(cart_add);
-						}
-						break;
-					}
-				}
-			}
+			} 
 		} catch (Exception e) {
 			code = "1002";
 			message = "系统异常";
@@ -617,7 +398,7 @@ public class ShoppingCartService {
 						message = "退菜单价超过菜品原价，请重新输入";
 					}else{
 						ShoppingCartGoodsBack back = new ShoppingCartGoodsBack();
-						back.setCart_id(scg.getCart_id());
+						//back.setCart_id(scg.getCart_id());
 						back.setFrom(scg.getFrom());
 						back.setDiscount(scg.getDiscount());
 						back.setGood_id(scg.getGood_id());

@@ -9,8 +9,8 @@
             </column>
             <generator class="uuid"></generator>
         </id>
-        <property name="user_id" type="integer">
-        	<column name="USER_ID" length="10">
+        <property name="user_id" type="string">
+        	<column name="USER_ID" length="32">
         		<comment>用户ID</comment>
         	</column>
         </property>
@@ -76,8 +76,8 @@
         	</column>
         </property>
         
-         <property name="shopping_cart_id" type="integer">
-        	<column name="SHOPPING_CART_ID" length="10">
+         <property name="shopping_cart_id" type="string">
+        	<column name="SHOPPING_CART_ID" length="32">
         		<comment>购物车ID</comment>
         	</column>
         </property>
@@ -127,6 +127,12 @@
         		<comment>上菜方式 1.做好即上，2：等待叫起</comment>
         	</column>
         </property>
+        <property name="address" type="string">
+        	<column name="ADDRESS" length="256">
+        		<comment>送货地址</comment>
+        	</column>
+        </property>
+        
         
     </class>
 </hibernate-mapping>
