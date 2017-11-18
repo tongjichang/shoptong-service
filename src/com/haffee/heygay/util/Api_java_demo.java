@@ -366,9 +366,9 @@ public class Api_java_demo implements Runnable {
 		// 根据打印纸张的宽度，自行调整内容的格式，可参考下面的样例格式
 
 		String content;
-		content = "<CB>预结单</CB><BR>";
+		content = "<CB>商品小票</CB><BR>";
 		content += "--------------------------------<BR>";
-		content += "桌号：" + o.getArea().getArea_name()+" "+o.getTable().getTable_name() + "  人数:" + o.getPeople_count() + " 服务员:" + w.getName() + "<BR>";
+		//content += "桌号：" + o.getArea().getArea_name()+" "+o.getTable().getTable_name() + "  人数:" + o.getPeople_count() + " 服务员:" + w.getName() + "<BR>";
 		content += "账单编号：" + o.getOrder_num() + "<BR>";
 		content += "时间：" + str + "<BR>";
 		content += "--------------------------------<BR>";
@@ -381,22 +381,15 @@ public class Api_java_demo implements Runnable {
 				content +=  "　	    " + s.getGood_price() + "   " + s.getGood_num() + "      "
 						+ s.getGood_total_price() + "<BR>";
 			}
-			if(object instanceof ShoppingCartGoodsBack){
-				ShoppingCartGoodsBack s = (ShoppingCartGoodsBack) object;
-				content += s.getGood_name()+"<BR>";
-				content +=  "　	    " + s.getGood_price() + "   " + s.getGood_num() + "      "
-						+ s.getGood_total_price() + "<BR>";
-			}
-			
 		}
 		content += "							总计:" + o.getPayment() + "<BR>";
 		content += "--------------------------------<BR>";
 		// content += "名称 金额";
 		// content += "--------------------------------<BR>";
 		content += "应收金额:" + o.getPayment() + "<BR>";
-		content += "折扣后金额:" + o.getDiscount_payment() + "<BR>";
-		content += "抹零:" + o.getMinus_money() + "<BR>";
-		content += "实收金额:" + o.getReal_payment() + "<BR>";
+		//content += "折扣后金额:" + o.getDiscount_payment() + "<BR>";
+		//content += "抹零:" + o.getMinus_money() + "<BR>";
+		//content += "实收金额:" + o.getReal_payment() + "<BR>";
 		content += "--------------------------------<BR>";
 
 		// 通过POST请求，发送打印信息到服务器

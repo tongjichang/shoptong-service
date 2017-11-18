@@ -159,8 +159,9 @@ public class OrderService {
 					order.setPayment(cart.getTotal_price());
 					order.setGoods_num(cart.getTotal_num());
 					order.setStatus(-1);
-					order.setShop_id(cart.getShop_id());
-					order.setOrder_num(genOrderNum());// 设置订单号
+					order.setShop_id(order_form.getShop_id());
+					String order_num = genOrderNum();
+					order.setOrder_num(order_num);// 设置订单号
 					order.setShopping_cart_id(cart_id);
 					order.setUser_id(order_form.getUser_id());
 					order.setAddress(order_form.getAddress());
@@ -174,6 +175,26 @@ public class OrderService {
 					dao.doSaveObject(order);// 保存订单
 					cart.setStatus(1);
 					dao.doUpdateObject(cart);// 更新购物车状态
+					
+					OrderInfo o = (OrderInfo)dao.getOneObject("from OrderInfo where order_num='"+order_num+"'");
+					
+					ShoppingCart s = (ShoppingCart) dao
+							.getOneObject("from ShoppingCart s where s.cart_id='" + o.getShopping_cart_id()+"'");
+					if (null != s) {
+						List<Object> list = dao
+								.getAllObject("from ShoppingCartGoods scg where scg.cart_id='" + s.getCart_id()+"'");
+						s.setGoods_set(list);
+						o.setCart(s);
+					}
+					
+					if(null!=o){
+						ShopPrinter printer = (ShopPrinter)dao.getOneObject("from ShopPrinter s where s.shop_id="+o.getShop_id());
+						if(null!=printer){
+							if(StringUtils.isNotEmpty(printer.getPrinter_no())){
+								checkPrint(o,printer.getPrinter_no());
+							}
+						}
+					}
 				}
 			} catch (Exception e) {
 				code = "1002";
@@ -408,7 +429,7 @@ public class OrderService {
 							ShopPrinter printer = (ShopPrinter)dao.getOneObject("from ShopPrinter s where s.shop_id="+o.getShop_id()+" and s.type_print=2");
 							Waiter w = (Waiter)dao.getOneObject("from Waiter w where waiter_id="+o.getWaiter_id());
 							if(StringUtils.isNotEmpty(printer.getPrinter_no())){
-								checkPrint(o,printer.getPrinter_no(),w);
+								//checkPrint(o,printer.getPrinter_no(),w);
 							}
 							
 							BookInfo book = (BookInfo)dao.getOneObject("from BookInfo b where b.table_id="+t.getTable_id()+" and b.shop_id="+t.getShop_id()+" and b.status=1");
@@ -1114,12 +1135,11 @@ public class OrderService {
 		return map;
 	}
 	
-	public void checkPrint(OrderInfo order,String printer_no,Waiter waiter){
+	public void checkPrint(OrderInfo order,String printer_no){
 		Api_java_demo printer = new Api_java_demo();
 		printer.setFlag("2");
 		printer.setO(order);
 		printer.setPrinter(printer_no);
-		printer.setW(waiter);
 		Thread thread = new Thread(printer);
 		thread.start();
 	}
@@ -1166,7 +1186,7 @@ public class OrderService {
 					ShopPrinter printer = (ShopPrinter)dao.getOneObject("from ShopPrinter s where s.shop_id="+o.getShop_id()+" and s.type_print=2");
 					Waiter w = (Waiter)dao.getOneObject("from Waiter w where waiter_id="+o.getWaiter_id());
 					if(StringUtils.isNotEmpty(printer.getPrinter_no())){
-						checkPrint(o,printer.getPrinter_no(),w);
+						//checkPrint(o,printer.getPrinter_no(),w);
 					}
 				} else {
 					code = "1001";
