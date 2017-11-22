@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.haffee.heygay.dao.IUserDao;
+import com.haffee.heygay.po.AA10;
 import com.haffee.heygay.po.User;
 import com.haffee.heygay.po.Waiter;
 
@@ -181,4 +182,59 @@ public class UserManageService {
 		map.put("MESSAGE", message);
 		return map;
 	}
+	
+	/**
+	 * 发送验证码
+	 * @param phone_no
+	 * @return
+	 */
+	@RequestMapping(value="/userservice/sendCode",method=RequestMethod.POST)
+	public @ResponseBody Object sentValidCode(String phone_no){
+		String message = "成功";
+		String code = "1000";		
+		Map<String,Object> map = new HashMap<String,Object>();
+		try {
+			Date date = new Date();
+			int num = (int)(Math.random()*(9999-1000+1))+1000;
+			AA10 a = new AA10();
+			a.setCode(num+"");
+			a.setPhone(phone_no);
+			a.setSend_time(new Timestamp(date.getTime()));
+			dao.doSaveObject(a);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		map.put("CODE", code);
+		map.put("MESSAGE", message);
+		return map;
+	}
+	
+	/**
+	 * 校验验证码
+	 * @param phone
+	 * @param valid_code
+	 * @return
+	 */
+	@RequestMapping(value="/userservice/checkCode",method=RequestMethod.POST)
+	public @ResponseBody Object checkValidCode(String phone,String valid_code){
+		String message = "成功";
+		String code = "1002";		
+		Map<String,Object> map = new HashMap<String,Object>();
+		
+		AA10 a = (AA10)dao.getOneObject("from AA10 a where a.phone='"+phone+"' and code='"+valid_code+"' order by a.send_time desc");
+		if(null!=a){
+			Date date = new Date();
+			long ms = date.getTime()-a.getSend_time().getTime();
+			long min  = ms/(1000*60);
+			if(min<5){
+				code = "1000";
+			}
+		}
+		map.put("CODE", code);
+		map.put("MESSAGE", message);
+		return map;
+	}
+	
+	
 }
