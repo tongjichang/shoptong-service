@@ -14,19 +14,24 @@
         		<comment>二级代码</comment>
         	</column>
         </property>
-        <property name="code_name" type="string">
-        	<column name="CODE_NAME" length="20">
+        <property name="phone" type="string">
+        	<column name="PHONE" length="20">
         		<comment>二级代码名称</comment>
         	</column>
         </property>
-        <property name="code_value" type="string">
-        	<column name="CODE_VALUE" length="20">
+        <property name="ip" type="string">
+        	<column name="IP" length="20">
         		<comment>二级代码值</comment>
         	</column>
         </property>
-        <property name="order_num" type="integer">
-        	<column name="ORDER_NUM" length="2">
+        <property name="remark" type="string">
+        	<column name="REMARK" length="32">
         		<comment>排序编号</comment>
+        	</column>
+        </property>
+        <property name="send_time" type="timestamp">
+        	<column name="SEND_TIME" length="20">
+        		<comment>验证码发送时间</comment>
         	</column>
         </property>
     </class>

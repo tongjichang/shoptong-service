@@ -1,5 +1,7 @@
 package com.haffee.heygay.po;
 
+import java.util.Date;
+
 /**
  * 二级代码表
  * 
@@ -9,17 +11,18 @@ package com.haffee.heygay.po;
  */
 public class AA10 {
 
-	private String id;//自定义，根据code+code_value 格式
+	private int id;//自定义，根据code+code_value 格式
 	private String code;
-	private String code_name;
-	private String code_value;
-	private int order_num;// 排序
+	private String phone;
+	private String ip;
+	private String remark;// 排序
+	private Date send_time;
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -31,28 +34,37 @@ public class AA10 {
 		this.code = code;
 	}
 
-	public String getCode_name() {
-		return code_name;
+	public String getPhone() {
+		return phone;
 	}
 
-	public void setCode_name(String code_name) {
-		this.code_name = code_name;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
-	public String getCode_value() {
-		return code_value;
+	public String getIp() {
+		return ip;
 	}
 
-	public void setCode_value(String code_value) {
-		this.code_value = code_value;
+	public void setIp(String ip) {
+		this.ip = ip;
 	}
 
-	public int getOrder_num() {
-		return order_num;
+	public String getRemark() {
+		return remark;
 	}
 
-	public void setOrder_num(int order_num) {
-		this.order_num = order_num;
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
+
+	public Date getSend_time() {
+		return send_time;
+	}
+
+	public void setSend_time(Date send_time) {
+		this.send_time = send_time;
+	}
+
 
 }
