@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.haffee.heygay.dao.IUserDao;
 import com.haffee.heygay.po.Shop;
 import com.haffee.heygay.po.User;
+import com.haffee.heygay.util.QRCodeUtil;
 
 import cn.jiguang.common.utils.StringUtils;
 
@@ -324,6 +325,17 @@ public class ShopManageService {
 					}
 					// 3.更新shop图片
 					dao.doUpdateObject(s);//新增店铺BUG
+					String logo = "";
+					if (null != s) {
+						logo = s.getIcon();
+					}
+					String path_logo = request.getSession().getServletContext().getRealPath("shop_" + s.getShop_id());
+					if(null!=logo){
+						logo = path_logo+logo.replace("/shoptong/shop_"+s.getShop_id(), "");
+					}
+					QRCodeUtil.encode(
+							"http://39.106.117.141:3521/users?shop_id=" + s.getShop_id(), logo,
+							path, true, "qrcode_" + s.getShop_id());
 				} catch (Exception e) {
 					code = "1002";
 					message = "系统异常";
