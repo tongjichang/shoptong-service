@@ -20,6 +20,7 @@ import com.haffee.heygay.dao.IUserDao;
 import com.haffee.heygay.po.AA10;
 import com.haffee.heygay.po.User;
 import com.haffee.heygay.po.Waiter;
+import com.haffee.heygay.util.SmsUtils;
 
 import net.sf.json.JSONObject;
 
@@ -201,6 +202,7 @@ public class UserManageService {
 			a.setPhone(phone_no);
 			a.setSend_time(new Timestamp(date.getTime()));
 			dao.doSaveObject(a);
+			SmsUtils.singleSend(phone_no,num+"");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
