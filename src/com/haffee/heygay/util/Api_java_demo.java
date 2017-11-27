@@ -383,14 +383,16 @@ public class Api_java_demo implements Runnable {
 			}
 		}
 		content += "							总计:" + o.getPayment() + "<BR>";
-		content += "--------------------------------<BR>";
 		// content += "名称 金额";
 		// content += "--------------------------------<BR>";
 		content += "应收金额:" + o.getPayment() + "<BR>";
+		content += "--------------------------------<BR>";
 		//content += "折扣后金额:" + o.getDiscount_payment() + "<BR>";
 		//content += "抹零:" + o.getMinus_money() + "<BR>";
 		//content += "实收金额:" + o.getReal_payment() + "<BR>";
-		content += "--------------------------------<BR>";
+		content += "<B>备注："+o.getComments()+"<B><BR>";
+		content += "----------------<BR>";
+		content += "<B>地址："+o.getAddress()+"<B>";
 
 		// 通过POST请求，发送打印信息到服务器
 		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(30000)// 读取超时
